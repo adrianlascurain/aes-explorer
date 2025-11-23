@@ -1,0 +1,26 @@
+
+.state-wrapper {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    width: 100%;
+    width: 120px;
+    grid-auto-flow: column;
+    border: 1px white solid;
+    box-sizing: border-box;
+}
+
+.state-element {
+    width: 100%;
+    min-width: 0;
+    display: flex;
+    aspect-ratio: 1/1;
+    border: 1px white solid;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.hover-on-element{
+    background-color: blue;
+}

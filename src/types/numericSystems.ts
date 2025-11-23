@@ -1,0 +1,1 @@
+export type numericSystem = "hex" | "dec" | "bin";
