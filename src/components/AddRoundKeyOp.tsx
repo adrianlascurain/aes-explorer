@@ -1,4 +1,4 @@
-import {useState, useRef } from "react";
+import {useState} from "react";
 import StateGrid from "./StateGrid";
 import type { Matrix4x4 } from "../types/matrix";
 import "./AddRoundKey.css";

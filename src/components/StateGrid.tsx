@@ -1,7 +1,5 @@
 import './StateGrid.css';
 import type { Matrix4x4 } from '../types/matrix';
-import { useState } from 'react';
-import {useRef} from 'react';
 import type { numericSystem } from '../types/numericSystems';
 
 type StateGridProps = {
