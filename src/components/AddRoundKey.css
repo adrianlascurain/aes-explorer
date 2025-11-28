@@ -8,7 +8,7 @@
 
 .grids-container{
     display: flex;
-    gap: 15px;
+    gap: clamp(5px,3vw,15px);
     justify-content: center;
     align-items: center;
 }
@@ -45,6 +45,7 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    font-size: clamp(12px,3vw,18px);
 }
 
 .title-icon{

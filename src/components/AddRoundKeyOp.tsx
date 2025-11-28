@@ -6,12 +6,14 @@ import xorIcon from "../assets/xorop.svg";
 import pentagonIcon from "../assets/pentagon.svg";
 import triangleIcon from "../assets/triangle.svg";
 import circleIcon from "../assets/circle.svg";
+import type { numericSystem } from "../types/numericSystems";
 
-function AddRoundKeyOp({state,roundKey,stateTitle,roundKeyTitle,resultTitle}: {state: Matrix4x4, 
+function AddRoundKeyOp({state,roundKey,stateTitle,roundKeyTitle,resultTitle,representation}: {state: Matrix4x4, 
     roundKey: Matrix4x4,
     stateTitle: string,
     roundKeyTitle: string,
-    resultTitle: string}){
+    resultTitle: string,
+    representation: numericSystem}){
 
     const [selectedRow, setSelectedRow] = useState<number>(0);
     const [selectedCol, setSelectedCol] = useState<number>(0);
@@ -67,7 +69,7 @@ function AddRoundKeyOp({state,roundKey,stateTitle,roundKeyTitle,resultTitle}: {s
                         handleOnMouseEnter={handleOnMouseEnter}
                         handleOnMouseLeave={handleOnMouseLeave}
                         selectedColor="#D65757"
-                        representation="hex"
+                        representation={representation}
                     />
                 </div>
                 <img className="xor-icon" src={xorIcon} alt="" />
@@ -83,7 +85,7 @@ function AddRoundKeyOp({state,roundKey,stateTitle,roundKeyTitle,resultTitle}: {s
                         handleOnMouseEnter={handleOnMouseEnter}
                         handleOnMouseLeave={handleOnMouseLeave}
                         selectedColor="#2A58AD"
-                        representation="hex"
+                        representation={representation}
                     />
                 </div>
             </div>
@@ -128,7 +130,7 @@ function AddRoundKeyOp({state,roundKey,stateTitle,roundKeyTitle,resultTitle}: {s
                         handleOnMouseEnter={handleOnMouseEnter}
                         handleOnMouseLeave={handleOnMouseLeave}
                         selectedColor="#0FD53D"
-                        representation="hex"
+                        representation={representation}
                     />
                 </div>
             </div>
