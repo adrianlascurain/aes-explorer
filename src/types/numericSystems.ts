@@ -1,1 +1,1 @@
-export type numericSystem = "hex" | "dec" | "bin";
+export type numericSystem = "hex" | "hexPadded" | "invHexPadded" | "dec" | "bin" | "8bitBin";
