@@ -1,0 +1,1 @@
+export type Shift = "normal" | "inverse";
