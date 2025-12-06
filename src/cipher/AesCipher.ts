@@ -64,18 +64,18 @@ export default class AesCipher{
         ) as Matrix4x4;
     }
 
-    shiftRows(state: number[][]): number[][] {
+    static shiftRows(state: number[][]): Matrix4x4 {
         return state.map((row, rowIndex) => {
             const shiftAmount = rowIndex;
             return row.slice(shiftAmount).concat(row.slice(0, shiftAmount));
-        });
+        })  as Matrix4x4;
     }
 
-    invShiftRows(state: number[][]): number[][] {
+    static invShiftRows(state: number[][]): Matrix4x4 {
         return state.map((row, rowIndex) => {
             const shiftAmount = 4 - rowIndex;
             return row.slice(shiftAmount).concat(row.slice(0, shiftAmount));
-        });
+        }) as Matrix4x4;
     }
 
     mixColumns(state: number[][]): number[][] {
