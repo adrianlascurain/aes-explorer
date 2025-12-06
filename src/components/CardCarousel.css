@@ -1,0 +1,98 @@
+
+
+.carousel-container{
+    width: 90vw;
+    max-width: 280px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+
+    background-color: transparent;
+    box-shadow: none;  /* Quitar sombra del contenedor */
+}
+
+
+.card-header{
+    display: flex;
+    justify-content: start;
+    margin: 15px;
+    margin-bottom: 0;
+    align-items: center;
+}
+
+.card-header h3{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    margin: 0;
+    overflow-wrap: anywhere;
+    width: 200px;
+    height: 60px;
+    overflow-y: hidden;
+    font-size: 16px;
+    font-family: 'Montserrat';
+}
+
+.card-body{
+    width: 100%;
+    background-color: #222;
+    border-radius: 15px;
+    box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.8);
+}
+
+.card-content{
+    margin-top: 15px;
+    margin-left: 15px;
+    margin-right: 15px;
+    height: 200px;
+    overflow-y: auto;
+    font-size: 14px;
+}
+
+.card-figure{
+    width: 50px;
+    height: 50px;
+    text-align: end;
+    margin: 0;
+}
+
+.card-figure img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    text-align: center;
+    
+}
+
+.next-item{
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+}
+
+.previous-item{
+    width: 50px;
+    height: 50px;
+    rotate: 180deg;
+    cursor: pointer;
+}
+
+.next-item img, .previous-item img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: invert(1);
+}
+
+.card-selector{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px;
+}
+
+.card-indicators{
+    display: flex;
+    gap: 5px;
+}
