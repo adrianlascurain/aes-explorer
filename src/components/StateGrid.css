@@ -21,6 +21,7 @@
     align-items: center;
     box-sizing: border-box;
     font-size: clamp(12px,2vw,20px);
+    cursor: pointer;
 }
 
 .hover-on-element{
