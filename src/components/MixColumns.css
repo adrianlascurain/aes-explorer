@@ -1,0 +1,82 @@
+.mco-grid-multiplication-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(5px, 3vw, 15px);
+}
+
+.xor-figure{
+    width: 32px;
+    height: 32px;
+    margin: 0;
+}
+
+.xor-figure img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    margin: 0;
+}
+
+.state-wrapper{
+    margin: 0;
+}
+
+.xor-icon-figure{
+    margin: 0;
+    width: 25px;
+    height: 25px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+
+.xor-icon-figure img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: invert(1);
+}
+
+.mco-col-row-multiplication-container{
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    margin-top: 25px;
+}
+
+.mco-multi-visual-mul-container hr{
+    height: 1px;
+    background-color: white;
+}
+
+.mco-multiplication-figure{
+    width: 32px;
+    height: 32px;
+    margin: 60px 0 0 0;
+}
+
+.mco-multiplication-figure img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: invert(1);
+}
+
+.mco-title-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.mco-title-container img{   
+    width: 25px;
+    height: 25px;
+    object-fit: contain;
+    margin: 0;
+}
+
+.mco-title-container h3{
+    margin: 0 0 5px 0;
+}
+
