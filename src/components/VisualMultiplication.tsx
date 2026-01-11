@@ -12,24 +12,23 @@ function VisualMultiplication({g1Row,g1Col,g2Row,g2Col,state,representation,g1Im
     let g2ValueToShow = representation === "matrixPosition" ? `(${g2Row + 1},${g2Col + 1})` : convert2System(state? state[g2Row][g2Col] : 0,representation);
 
     return(
-        // Considerar extraer componente para reutilizar en múltiples operaciones
         <div className="vm-multiplication-container">
-            <div className="multiplication-grid-container">
-                <figure className="icon-figure">
+            <div className="vm-multiplication-grid-container">
+                <figure className="vm-icon-figure">
                     <img src={g1Img} alt="" />
                 </figure>
-                <div className="matrix-value-container">
+                <div className="vm-matrix-value-container">
                     {g1ValueToShow}
                 </div>
             </div>
-            <figure className="multiplication-icon-figure">
+            <figure className="vm-multiplication-icon-figure">
                 <img src={multiplicationIcon} alt="" />
             </figure>
-            <div className="multiplication-grid-container">
-                <figure className="icon-figure">
+            <div className="vm-multiplication-grid-container">
+                <figure className="vm-icon-figure">
                     <img src={g2Img} alt="" />
                 </figure>
-                <div className="matrix-value-container">
+                <div className="vm-matrix-value-container">
                     {g2ValueToShow}
                 </div>
             </div>
