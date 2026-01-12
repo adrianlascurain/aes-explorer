@@ -10,7 +10,7 @@ import './MixColumns.css'
 import VisualMultiplication from './VisualMultiplication';
 import GFMatrixMultiplier from './GFMatrixMultiplier';
 
-function MixColumnsOp({state} : {state: Matrix4x4}){
+function MixColumnsOp({state,fixedPolynomios} : {state: Matrix4x4, fixedPolynomios: Matrix4x4}){
 
 
     const [g1SelectedRow, setG1SelectedRow] = useState<number>(0);
@@ -48,16 +48,16 @@ function MixColumnsOp({state} : {state: Matrix4x4}){
             <div className="mco-grid-multiplication-container">
                 <div className="mco-grid-group-container">
                     <div className="mco-title-container">
-                        <img src={pentagonIcon} alt=""/>
-                        <h3 className="mco-grid-title">Estado</h3>    
+                        <img src={triangleIcon} alt=""/>
+                        <h3 className="mco-grid-title">Polinomios</h3>    
                     </div>
                     <StateGrid
-                        state={state}
+                        state={fixedPolynomios}
                         isCellSelected={isG1RowSelected}
                         handleClickOnElement={handleClickOnElementG1}
                         handleOnMouseEnter={() => {}}
                         handleOnMouseLeave={() => {}}
-                        selectedColor="#D65757"
+                        selectedColor="#2A58AD"
                         representation={'dec'}
                     />
                 </div>
@@ -67,8 +67,8 @@ function MixColumnsOp({state} : {state: Matrix4x4}){
                 
                 <div className="mco-grid-group-container">
                     <div className="mco-title-container">
-                        <img src={triangleIcon} alt=""/>
-                        <h3 className="mco-grid-title">Clave de Ronda</h3>    
+                        <img src={pentagonIcon} alt=""/>
+                        <h3 className="mco-grid-title">Estado</h3>    
                     </div>
                     <StateGrid
                         state={state}
@@ -76,23 +76,26 @@ function MixColumnsOp({state} : {state: Matrix4x4}){
                         handleClickOnElement={handleClickOnElementG2}
                         handleOnMouseEnter={() => {}}
                         handleOnMouseLeave={() => {}}
-                        selectedColor="#2A58AD"
+                        selectedColor="#D65757"
                         representation={'dec'}
                     />
                 </div>
             </div>
-            <div className='mco-col-row-multiplication-container'>
-                <figure className='xor-icon-figure'>
-                    <img src={xorIcon} alt="" />
-                </figure>
-                <div className='mco-multi-visual-mul-container'>
-                    <VisualMultiplication g1Row={g1SelectedCol} g1Col={0} g2Row={0} g2Col={g2SelectedRow} state={state} representation='dec' g1Img={pentagonIcon} g2Img={triangleIcon}></VisualMultiplication>
-                    <VisualMultiplication g1Row={g1SelectedCol} g1Col={1} g2Row={1} g2Col={g2SelectedRow} state={state} representation='dec' g1Img={pentagonIcon} g2Img={triangleIcon}></VisualMultiplication>
-                    <VisualMultiplication g1Row={g1SelectedCol} g1Col={2} g2Row={2} g2Col={g2SelectedRow} state={state} representation='dec' g1Img={pentagonIcon} g2Img={triangleIcon}></VisualMultiplication>
-                    <VisualMultiplication g1Row={g1SelectedCol} g1Col={3} g2Row={3} g2Col={g2SelectedRow} state={state} representation='dec' g1Img={pentagonIcon} g2Img={triangleIcon}></VisualMultiplication>
-                    <hr />
+            <div className='mco-operations-container'>
+                <div className='mco-xor-mul-container'>
+                    <figure className='mco-xor-icon-figure'>
+                        <img src={xorIcon} alt="" />
+                    </figure>
+                    <div className='mco-multi-visual-mul-container'>
+                        <VisualMultiplication g1Row={g1SelectedCol} g1Col={0} g1Value={fixedPolynomios[g1SelectedCol][0]} g2Row={0} g2Col={g2SelectedRow} g2Value={state[0][g2SelectedRow]} representation='8bitBin' g1Img={triangleIcon} g2Img={pentagonIcon}></VisualMultiplication>
+                        <VisualMultiplication g1Row={g1SelectedCol} g1Col={1} g1Value={fixedPolynomios[g1SelectedCol][1]} g2Row={1} g2Col={g2SelectedRow} g2Value={state[1][g2SelectedRow]} representation='8bitBin' g1Img={triangleIcon} g2Img={pentagonIcon}></VisualMultiplication>
+                        <VisualMultiplication g1Row={g1SelectedCol} g1Col={2} g1Value={fixedPolynomios[g1SelectedCol][2]} g2Row={2} g2Col={g2SelectedRow} g2Value={state[2][g2SelectedRow]} representation='8bitBin' g1Img={triangleIcon} g2Img={pentagonIcon}></VisualMultiplication>
+                        <VisualMultiplication g1Row={g1SelectedCol} g1Col={3} g1Value={fixedPolynomios[g1SelectedCol][3]} g2Row={3} g2Col={g2SelectedRow} g2Value={state[3][g2SelectedRow]} representation='8bitBin' g1Img={triangleIcon} g2Img={pentagonIcon}></VisualMultiplication>
+                        <hr />
+                    </div>
                 </div>
-                {/* <GFMatrixMultiplier binaryTitle='Binario' hexTitle='Hex' polynomialTitle='Polinomio' g1Col={1} g1Row={1} g2Col={1} g2Row={1} g1Img={pentagonIcon} g2Img={triangleIcon} g1Value={state[1][1]} g2Value={state[1][1]}/> */}
+                
+                <GFMatrixMultiplier binaryTitle='Binario' hexTitle='Hex' polynomialTitle='Polinomio' g1Col={g1SelectedRow} g1Row={g1SelectedCol} g2Col={g2SelectedRow} g2Row={g2SelectedCol} g1Img={triangleIcon} g2Img={pentagonIcon} g1Value={fixedPolynomios[g1SelectedCol][g1SelectedRow]} g2Value={state[g2SelectedCol][g2SelectedRow]}/>
             </div>
             
 
