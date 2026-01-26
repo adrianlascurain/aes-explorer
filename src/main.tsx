@@ -21,7 +21,7 @@ createRoot(document.getElementById('root')!).render(
     {/* <ShiftRowsOp state={[[255, 4, 190, 12], [1, 5, 111, 13], [2, 6, 10, 204], [3, 79, 11, 15]]} shiftType='normal' representation='dec'/> */}
     {/* <CardCarousel items={CardCarouselLanguage.getCarouselItems('ES')}/> */}
     {/* <PlayGround></PlayGround> */}
-    <MixColumnsOp state={[[255, 4, 190, 12], [1, 5, 111, 13], [2, 6, 10, 204], [3, 79, 11, 15]]} fixedPolynomios={AesCipher.MIX_COLUMNS_MATRIX as Matrix4x4}/>
+    <MixColumnsOp state={[[255, 4, 190, 12], [1, 5, 111, 13], [2, 6, 10, 204], [3, 79, 11, 15]]} fixedPolynomios={AesCipher.MIX_COLUMNS_INVERSE_MATRIX as Matrix4x4}/>
 
     {/* <LandingPage></LandingPage> */}
   </StrictMode>,
