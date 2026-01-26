@@ -85,12 +85,12 @@ export default class AesCipher{
         }) as Matrix4x4;
     }
 
-    mixColumns(state: number[][]): number[][] {
+    static mixColumns(state: number[][]): number[][] {
         const mixed = Array.from({ length: 4 }, () => Array(4).fill(0));
         for (let col = 0; col < 4; col++) {
             for (let row = 0; row < 4; row++) {
                 for (let k = 0; k < 4; k++) {
-                    mixed[row][col] ^= this.galoisMultiply(state[k][col], AesCipher.MIX_COLUMNS_MATRIX[row][k]);
+                    mixed[row][col] ^= AesCipher.galoisMultiply(state[k][col], AesCipher.MIX_COLUMNS_MATRIX[row][k]);
                 }
             }
         }
@@ -103,20 +103,59 @@ export default class AesCipher{
         );
     }
         
-    galoisMultiply(a: number, b: number): number {
+    static nonReducedGaloisMultiply(a: number, b: number): number[] {
+        const result = Array(11).fill(0);
+
+        a &= 0xff;
+        b &= 0xff;
+            
+        for (let i = 0; i < 11; i++) {
+            if ((b >> i) & 1) {
+                for (let j = 0; j < 11; j++) {
+                    const degree = i + j;
+                    if (degree <= 11 && ((a >> j) & 1)) {
+                        result[degree] += 1;
+                    }
+                }
+            }
+        }
+        // MSB at index 8 -> LSB at index 0
+        return result.reverse();
+    }
+
+    static expandCoefficients(coeffs: number[]): number[][] {
+        const max = Math.max(...coeffs);
+        const layers: number[][] = [];
+
+        for (let k = 0; k < max; k++) {
+            layers.push(
+                coeffs.map(c => (c > k ? 1 : 0))
+            );
+        }
+
+        return layers;
+    }
+
+    static galoisMultiply(a: number, b: number): number {
         let result = 0;
+        a &= 0xFF;
+        b &= 0xFF;
+
         for (let i = 0; i < 8; i++) {
             if (b & 1) {
                 result ^= a;
             }
+
             const highBit = a & 0x80;
-            a <<= 1;
+            a = (a <<= 1) & 0xFF;
+
             if (highBit) {
                 a ^= 0x1b;
             }
+
             b >>= 1;
         }
-        return result;
+        return result & 0xFF;
     }
 
 }
