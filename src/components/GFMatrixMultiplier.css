@@ -13,3 +13,7 @@
 .gfmm-multiplication-resume-table{
     border-spacing: 15px;
 }
+
+td{
+    text-align: center;
+}

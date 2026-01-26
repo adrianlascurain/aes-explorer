@@ -25,7 +25,7 @@ function GFMatrixMultiplier({g1Row,g1Col,g1Value,g2Row,g2Col,g2Value,hexTitle,bi
                                 <img src={g1Img} alt="" />
                             </figure>
                         </td>
-                        <td>{convert2System(g1Value,"hex")}</td>
+                        <td>{convert2System(g1Value,"hexPadded")}</td>
                         <td>{convert2System(g1Value,"8bitBin")}</td>
                         <td><PolynomialExp value={g1Value}></PolynomialExp></td>
                     </tr>
@@ -35,7 +35,7 @@ function GFMatrixMultiplier({g1Row,g1Col,g1Value,g2Row,g2Col,g2Value,hexTitle,bi
                                 <img src={g2Img} alt="" />
                             </figure>
                         </td>
-                        <td>{convert2System(g2Value,"hex")}</td>
+                        <td>{convert2System(g2Value,"hexPadded")}</td>
                         <td>{convert2System(g2Value,"8bitBin")}</td>
                         <td><PolynomialExp value={g2Value}></PolynomialExp></td>
                     </tr>
