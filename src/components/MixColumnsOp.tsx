@@ -35,14 +35,14 @@ function MixColumnsOp({state,fixedPolynomios} : {state: Matrix4x4, fixedPolynomi
         getCells(g1SelectedRow, g1SelectedCol, g2SelectedRow, g2SelectedCol);
     },[g1SelectedRow, g1SelectedCol, g2SelectedRow, g2SelectedCol]);
 
-    const handleClickOnElementG1 = (_e: React.MouseEvent, colIndex: number, rowIndex: number) => {        
+    const handleClickOnElementG1 = (_e: React.MouseEvent, rowIndex: number, colIndex: number) => {        
         setG1SelectedRow(rowIndex);
         setG1SelectedCol(colIndex);
-        setG2SelectedCol(rowIndex);
+        setG2SelectedRow(colIndex);
     };
 
-    const handleClickOnElementG2 = (_e: React.MouseEvent, colIndex: number, rowIndex: number) => {        
-        setG1SelectedRow(colIndex);
+    const handleClickOnElementG2 = (_e: React.MouseEvent, rowIndex: number, colIndex: number) => {        
+        setG1SelectedCol(rowIndex);
         setG2SelectedRow(rowIndex);
         setG2SelectedCol(colIndex);
     };
@@ -61,21 +61,21 @@ function MixColumnsOp({state,fixedPolynomios} : {state: Matrix4x4, fixedPolynomi
     
     const getCells = (i1: number,j1 :number, i2: number,j2 :number) => {
         if(g1SelectedCell){
-            if(lastGrid1SelectedRow.current != g1SelectedRow && lastGrid1SelectedCol.current == g1SelectedCol){
+            if(lastGrid1SelectedCol.current != g1SelectedCol && lastGrid1SelectedRow.current == g1SelectedRow){
                 Object.assign(g1SelectedCell.style,g1notHighlightStyles);
             }
             lastGrid1Ref.current = g1SelectedCell;
         }
 
         if(g2SelectedCell){
-            if(lastGrid2SelectedCol.current != g2SelectedCol && lastGrid2SelectedRow.current == g2SelectedRow){
+            if(lastGrid2SelectedRow.current != g2SelectedRow && lastGrid2SelectedCol.current == g2SelectedCol){
                 Object.assign(g2SelectedCell.style,g2notHighlightStyles)
             }
             lastGrid2Ref.current = g2SelectedCell;
         }
 
-        const g1Cell = stateGrid1Ref.current?.getElement(j1,i1);
-        const g2Cell = stateGrid2Ref.current?.getElement(j2,i2);
+        const g1Cell = stateGrid1Ref.current?.getElement(i1,j1);
+        const g2Cell = stateGrid2Ref.current?.getElement(i2,j2);
 
         if(g1Cell){
             lastGrid1SelectedRow.current = g1SelectedRow;
@@ -92,19 +92,93 @@ function MixColumnsOp({state,fixedPolynomios} : {state: Matrix4x4, fixedPolynomi
         }
     }
 
-    const handleOnMouseEnter = (e: React.MouseEvent) => {
+    const handleOnMouseEnterG1Row = (e: React.MouseEvent) => {
+        handleOnMouseEnter(e,true,g1SelectedRow,g1SelectedCol,"#2A58AD",stateGrid1Ref);
+    }
+
+     const handleOnMouseLeaveG1Row = (e: React.MouseEvent) => {
+        handleOnMouseLeave(e,true,g1SelectedRow,g1SelectedCol,stateGrid1Ref);
+    }
+
+    const handleOnMouseEnterG2Row = (e: React.MouseEvent) => {
+        handleOnMouseEnter(e,false,g2SelectedRow,g2SelectedCol,"#D65757",stateGrid2Ref);
+    }
+
+     const handleOnMouseLeaveG2Row = (e: React.MouseEvent) => {
+        handleOnMouseLeave(e,false,g2SelectedRow,g2SelectedCol,stateGrid2Ref);
+    }
+
+    const handleOnMouseEnter = (e: React.MouseEvent, isRowBased: boolean, selectedRow: number, selectedCol: number, color: string, stateGridRef: React.RefObject<StateGridHandle | null>) => {
         const target = e.target as HTMLElement;
-        if (!target.classList.contains("selected-element")) target.classList.add("hover-on-element");
+        const index = target.classList[1].split("-");
+        if(index && stateGridRef){
+            const row = parseInt(index[0]);
+            const col = parseInt(index[1]);
+            
+            if(isRowBased && row === selectedRow){
+                return;
+            }else if(!isRowBased && col === selectedCol){
+                return;
+            }
+
+            const elements: Array<HTMLElement | null | undefined> = Array(4); 
+            for(let i =0; i < 4; i++){
+                if(isRowBased){
+                    if(selectedRow == row){
+                        elements[i] = selectedCol != i ? stateGridRef.current?.getElement(row,i) : null;
+                    }else{
+                        elements[i] =  stateGridRef.current?.getElement(row,i);
+                    }
+                    
+                }else{
+                    if(selectedCol == col){
+                        elements[i] = selectedRow != i ? stateGridRef.current?.getElement(i,col) : null;
+                    }else{
+                        elements[i] = stateGridRef.current?.getElement(i,col);
+                    }
+                }   
+            }
+            elements.forEach(element => {
+                if(element){
+                    element.style.background = color;
+                }
+            });   
+        }   
     };
 
-    const handleOnMouseLeave = (e: React.MouseEvent) => {
+    const handleOnMouseLeave = (e: React.MouseEvent, isRowBased: boolean, selectedRow: number, selectedCol: number, stateGridRef: React.RefObject<StateGridHandle | null>) => {
         const target = e.target as HTMLElement;
-        target.classList.remove("hover-on-element");
+        const index = target.classList[1].split("-");
+        if(index){
+            const row = parseInt(index[0]);
+            const col = parseInt(index[1]);
+            
+            if(isRowBased && row === selectedRow){
+                return;
+            }else if(!isRowBased && col === selectedCol){
+                return;
+            }
+            
+            const elements: Array<HTMLElement | null | undefined> = Array(4); 
+            for(let i =0; i < 4; i++){
+                if(isRowBased){
+                    elements[i] = stateGridRef.current?.getElement(row,i);    
+                }else{
+                    elements[i] = stateGridRef.current?.getElement(i,col);
+                }   
+            }
+
+            elements.forEach(element => {
+                if(element){
+                    element.style.background = "transparent";
+                }
+            });   
+        }        
     };
 
     // Función que indica si una celda está seleccionada
-    const isG1RowSelected = (col: number, _row: number) => g1SelectedCol === col ;
-    const isG2ColSelected = (_col: number, row: number) => g2SelectedRow === row;
+    const isG1RowSelected = (row: number, _col: number) => g1SelectedRow === row;
+    const isG2ColSelected = (_row: number, col: number) => g2SelectedCol === col;
 
     return(
         <>
@@ -119,8 +193,8 @@ function MixColumnsOp({state,fixedPolynomios} : {state: Matrix4x4, fixedPolynomi
                         ref={stateGrid1Ref}
                         isCellSelected={isG1RowSelected}
                         handleClickOnElement={handleClickOnElementG1}
-                        handleOnMouseEnter={() => {}}
-                        handleOnMouseLeave={() => {}}
+                        handleOnMouseEnter={handleOnMouseEnterG1Row}
+                        handleOnMouseLeave={handleOnMouseLeaveG1Row}
                         selectedColor="#2A58AD"
                         representation={'hexPadded'}
                     />
@@ -139,8 +213,8 @@ function MixColumnsOp({state,fixedPolynomios} : {state: Matrix4x4, fixedPolynomi
                         ref={stateGrid2Ref}
                         isCellSelected={isG2ColSelected}
                         handleClickOnElement={handleClickOnElementG2}
-                        handleOnMouseEnter={() => {}}
-                        handleOnMouseLeave={() => {}}
+                        handleOnMouseEnter={handleOnMouseEnterG2Row}
+                        handleOnMouseLeave={handleOnMouseLeaveG2Row}
                         selectedColor="#D65757"
                         representation={'hexPadded'}
                     />
@@ -152,22 +226,22 @@ function MixColumnsOp({state,fixedPolynomios} : {state: Matrix4x4, fixedPolynomi
                         <img src={xorIcon} alt="" />
                     </figure>
                     <div className='mco-multi-visual-mul-container'>
-                        <VisualMultiplication g1Row={g1SelectedCol} g1Col={0} g1Value={fixedPolynomios[g1SelectedCol][0]} g2Row={0} g2Col={g2SelectedRow} g2Value={state[0][g2SelectedRow]} representation='hexPadded' g1Img={triangleIcon} g2Img={pentagonIcon}></VisualMultiplication>
-                        <VisualMultiplication g1Row={g1SelectedCol} g1Col={1} g1Value={fixedPolynomios[g1SelectedCol][1]} g2Row={1} g2Col={g2SelectedRow} g2Value={state[1][g2SelectedRow]} representation='hexPadded' g1Img={triangleIcon} g2Img={pentagonIcon}></VisualMultiplication>
-                        <VisualMultiplication g1Row={g1SelectedCol} g1Col={2} g1Value={fixedPolynomios[g1SelectedCol][2]} g2Row={2} g2Col={g2SelectedRow} g2Value={state[2][g2SelectedRow]} representation='hexPadded' g1Img={triangleIcon} g2Img={pentagonIcon}></VisualMultiplication>
-                        <VisualMultiplication g1Row={g1SelectedCol} g1Col={3} g1Value={fixedPolynomios[g1SelectedCol][3]} g2Row={3} g2Col={g2SelectedRow} g2Value={state[3][g2SelectedRow]} representation='hexPadded' g1Img={triangleIcon} g2Img={pentagonIcon}></VisualMultiplication>
+                        <VisualMultiplication g1Row={g1SelectedRow} g1Col={0} g1Value={fixedPolynomios[g1SelectedRow][0]} g2Row={0} g2Col={g2SelectedCol} g2Value={state[0][g2SelectedCol]} representation='hexPadded' g1Img={triangleIcon} g2Img={pentagonIcon}></VisualMultiplication>
+                        <VisualMultiplication g1Row={g1SelectedRow} g1Col={1} g1Value={fixedPolynomios[g1SelectedRow][1]} g2Row={1} g2Col={g2SelectedCol} g2Value={state[1][g2SelectedCol]} representation='hexPadded' g1Img={triangleIcon} g2Img={pentagonIcon}></VisualMultiplication>
+                        <VisualMultiplication g1Row={g1SelectedRow} g1Col={2} g1Value={fixedPolynomios[g1SelectedRow][2]} g2Row={2} g2Col={g2SelectedCol} g2Value={state[2][g2SelectedCol]} representation='hexPadded' g1Img={triangleIcon} g2Img={pentagonIcon}></VisualMultiplication>
+                        <VisualMultiplication g1Row={g1SelectedRow} g1Col={3} g1Value={fixedPolynomios[g1SelectedRow][3]} g2Row={3} g2Col={g2SelectedCol} g2Value={state[3][g2SelectedCol]} representation='hexPadded' g1Img={triangleIcon} g2Img={pentagonIcon}></VisualMultiplication>
                         <hr />
                     </div>
                 </div>
                 
-                <GFMatrixMultiplier binaryTitle='Binario' hexTitle='Hex' polynomialTitle='Polinomio' g1Col={g1SelectedRow} g1Row={g1SelectedCol} g2Col={g2SelectedRow} g2Row={g2SelectedCol} g1Img={triangleIcon} g2Img={pentagonIcon} g1Value={fixedPolynomios[g1SelectedCol][g1SelectedRow]} g2Value={state[g2SelectedCol][g2SelectedRow]}/>
+                <GFMatrixMultiplier binaryTitle='Binario' hexTitle='Hex' polynomialTitle='Polinomio' g1Row={g1SelectedRow} g1Col={g1SelectedCol} g2Row={g2SelectedRow} g2Col={g2SelectedCol} g1Img={triangleIcon} g2Img={pentagonIcon} g1Value={fixedPolynomios[g1SelectedRow][g1SelectedCol]} g2Value={state[g2SelectedRow][g2SelectedCol]}/>
 
                 <div className='mco-multiplication-container'>
-                    {<PolynomialExp value={AesCipher.galoisMultiply(fixedPolynomios[g1SelectedCol][g1SelectedRow],state[g2SelectedCol][g2SelectedRow]) }></PolynomialExp> }
+                    {<PolynomialExp value={AesCipher.galoisMultiply(fixedPolynomios[g1SelectedRow][g1SelectedCol],state[g2SelectedRow][g2SelectedCol]) }></PolynomialExp> }
                 </div>
 
                 <div>
-                    {AesCipher.nonReducedGaloisMultiply(fixedPolynomios[g1SelectedCol][g1SelectedRow],state[g2SelectedCol][g2SelectedRow])}
+                    {AesCipher.nonReducedGaloisMultiply(fixedPolynomios[g1SelectedRow][g1SelectedCol],state[g2SelectedRow][g2SelectedCol])}
                 </div>
             </div>
             

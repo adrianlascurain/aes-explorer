@@ -6,7 +6,7 @@ import { useImperativeHandle, useRef } from 'react';
 
 type StateGridProps = {
     state: Matrix4x4;
-    isCellSelected: (col: number, row: number) => boolean;
+    isCellSelected: (row: number, col: number) => boolean;
     handleClickOnElement: (e: React.MouseEvent, i: number, j: number) => void;
     handleOnMouseEnter: (e: React.MouseEvent, i: number, j: number) => void;
     handleOnMouseLeave: (e: React.MouseEvent, i: number, j: number) => void;
@@ -61,6 +61,7 @@ function StateGrid({
                 row.map((_value, j) => {
                     const selected = isCellSelected(i, j);
                     const key = `${i}-${j}`;
+                    const classes = `state-element ${key}`
                     return (
                         <div
                             key={key}
@@ -71,7 +72,7 @@ function StateGrid({
                                     elementsRef.current.delete(key)
                                 }
                             }}
-                            className="state-element"
+                            className={classes} 
                             style={{ background: selected? selectedColor : '' }}
                             onClick={(e) => handleClickOnElement(e, i, j)}
                             onMouseEnter={(e) => handleOnMouseEnter(e, i, j)}
