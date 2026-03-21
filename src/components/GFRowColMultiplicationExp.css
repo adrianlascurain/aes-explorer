@@ -1,0 +1,46 @@
+.gfrcme-component-wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.gfrcme-row-col-multiplication{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.gfrcme-multiplication-figure{
+    margin: 0 0.3rem;
+    width: 20px;
+    height: 20px;
+}
+
+.gfrcme-multiplication-figure img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: invert(1);
+}
+
+.gfrcme-left-parenthesis{
+    margin-right: 0.2rem;
+}
+
+.gfrcme-right-parenthesis{
+    margin-left: 0.2rem;
+}
+
+.gfrcme-addition-figure{
+    margin: 0 0.3rem;
+    width: 20px;
+    height: 20px;
+}
+
+.gfrcme-addition-figure img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: invert(1);
+}
