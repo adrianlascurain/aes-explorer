@@ -1,0 +1,19 @@
+.mst-table-icon-figure{
+    width: 25px;
+    height: 25px;
+    margin: 0;
+}
+
+.mst-table-icon-figure img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.mst-multiplication-resume-table{
+    border-spacing: 15px;
+}
+
+td{
+    text-align: center;
+}
