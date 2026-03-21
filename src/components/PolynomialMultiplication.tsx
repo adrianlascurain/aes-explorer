@@ -1,17 +1,21 @@
-import type { JSX } from "react";
-import AesCipher from "../cipher/AesCipher";
+import PolynomialExp from "./PolynomialExp";
+import "../components/PolynomialMultiplication.css"
 
-function PolynomialMultiplication({coefficients, reducedVersion} : {coefficients: number[], reducedVersion: boolean}){
-    const expandedPolynomio = AesCipher.expandCoefficients(coefficients);
+function PolynomialMultiplication({firstPoly, secondPoly} : {firstPoly: number, secondPoly: number}){
     return (
-        expandedPolynomio.map((coeffs) => {
-            coeffs.map((coeff, index) => (
-                <span key={`term-${index}`}>
-                    {index > 0 && ' + '}
-                    {coeff}
-                </span>
-            ))
-        })
+    <div className='pm-polynomial-multiplication'>
+        <span className="pm-left-parenthesis">(</span>
+        <span className='pm-polynomial-term'>
+            <PolynomialExp value={firstPoly} />
+        </span>
+        <span className="pm-right-parenthesis">)</span>
+        <span className='pm-separator'>•</span>
+        <span className="pm-left-parenthesis">(</span>
+        <span className='pm-polynomial-term'>
+            <PolynomialExp value={secondPoly} />
+        </span>
+        <span className="pm-right-parenthesis">)</span>
+    </div>
     );
 }
 
