@@ -1,0 +1,10 @@
+.pm-polynomial-operation{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.pm-separator{
+    margin: 0 0.3rem
+}
