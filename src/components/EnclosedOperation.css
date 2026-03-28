@@ -1,0 +1,14 @@
+.eo-general-operation{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.eo-right-enclose-char{
+    margin-left: 0.3rem;
+}
+
+.eo-left-enclose-char{
+    margin-right: 0.3rem;
+}
