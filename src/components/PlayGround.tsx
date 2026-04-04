@@ -27,7 +27,7 @@ function PlayGround(){
                 state={[[255, 4, 190, 12], [1, 5, 111, 13], [2, 6, 10, 204], [3, 79, 11, 15]]}
                 stateTitle='Estado'
                 resultTitle='Resultado'
-                sBox={AesCipher.invSBox}
+                sBox={AesCipher.INV_SBOX}
                 representation='hex'
                 lowNibbleTitle='Low Nibble: '
                 highNibbleTitle='High Nibble: '
