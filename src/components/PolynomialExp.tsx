@@ -1,5 +1,5 @@
 import { convert2System } from "../utilities/conversor";
-import getPolynomialTerms from "../utilities/polyCreator"
+import {getPolynomialTerms} from "../utilities/polyCreator"
 
 function PolynomialExp({value} : {value:number}){
     const binaryString: string = convert2System(value,"8bitBin");
