@@ -85,3 +85,24 @@
     display: flex;
     align-items: end;
 }
+
+.mco-matrix-multiplication-summary{
+    display: flex;
+}
+
+.mco-component-wrapper{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100vw;
+    gap: 25px;
+    justify-content: center;
+}
+
+.mco-operation-procedure{
+    margin: 0px 20px;
+    width: clamp(500px, 90%, 900px);
+}
+
+.mco-quick-visualization{
+    margin: 0px 20px;
+}
