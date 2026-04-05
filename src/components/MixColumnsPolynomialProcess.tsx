@@ -1,11 +1,11 @@
 import type {JSX} from "react";
 import { baseReductions } from "../constants/MixColumnsPolynomialConstants";
 import "../constants/MixColumnsPolynomialConstants.css";
-import "./MixColumnsPolynomialDevelop.css";
+import "./MixColumnsPolynomialProcess.css";
 import ChainedPolynomialExp from "./ChainedPolynomialExp";
 import { modularGFReduction } from "../utilities/MixColumnUtils";
 
-function MixColumnsPolynomialDevelop({nonReducedCoefficients} : {nonReducedCoefficients: number[]}){
+function MixColumnsPolynomialProcess({nonReducedCoefficients} : {nonReducedCoefficients: number[]}){
     const polynomiosSubstitutes: Array<JSX.Element> = new Array();
     let needsSubstitution: boolean = false;
     let needsAddition = false;
@@ -62,4 +62,4 @@ function MixColumnsPolynomialDevelop({nonReducedCoefficients} : {nonReducedCoeff
     )
 }
 
-export default MixColumnsPolynomialDevelop;
+export default MixColumnsPolynomialProcess;

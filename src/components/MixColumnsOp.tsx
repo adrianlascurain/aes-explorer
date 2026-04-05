@@ -13,7 +13,7 @@ import AesCipher from '../cipher/AesCipher';
 import PolynomialOperation from './PolynomialOperation';
 import GFRowColMultiplicationExp from './GFRowColMultiplicationExp';
 import ChainedPolynomialExp from './ChainedPolynomialExp';
-import MixColumnsPolynomialDevelop from './MixColumnsPolynomialDevelop';
+import MixColumnsPolynomialProcess from './MixColumnsPolynomialProcess';
 import PolynomialExp from './PolynomialExp';
 
 function MixColumnsOp({state,fixedPolynomios} : {state: Matrix4x4, fixedPolynomios: Matrix4x4}){
@@ -329,7 +329,7 @@ function MixColumnsOp({state,fixedPolynomios} : {state: Matrix4x4, fixedPolynomi
                     </div>
 
                     <div>
-                        <MixColumnsPolynomialDevelop nonReducedCoefficients={AesCipher.nonReducedGaloisMultiply(fixedPolynomios[g1SelectedRow][g1SelectedCol],state[g2SelectedRow][g2SelectedCol])}></MixColumnsPolynomialDevelop>
+                        <MixColumnsPolynomialProcess nonReducedCoefficients={AesCipher.nonReducedGaloisMultiply(fixedPolynomios[g1SelectedRow][g1SelectedCol],state[g2SelectedRow][g2SelectedCol])}></MixColumnsPolynomialProcess>
                     </div>
 
                     <div>

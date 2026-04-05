@@ -1,6 +1,6 @@
 import type { CSSProperties, JSX } from "react";
 import {getPolynomialTermsByArray} from "../utilities/polyCreator"
-import { createLineThroughOfNonReducedCoefficients, expandCoefficients, modularGFReduction } from "../utilities/MixColumnUtils";
+import { createLineThroughOfNonReducedCoefficients, expandCoefficients } from "../utilities/MixColumnUtils";
 
 
 function ChainedPolynomialExp({nonReducedCoeffcients,replaceWithReduction = false, applyXOR} : {nonReducedCoeffcients: number[], replaceWithReduction?: boolean, applyXOR?: boolean}){
