@@ -13,8 +13,8 @@ import AesCipher from '../cipher/AesCipher';
 import PolynomialOperation from './PolynomialOperation';
 import GFRowColMultiplicationExp from './GFRowColMultiplicationExp';
 import ChainedPolynomialExp from './ChainedPolynomialExp';
-import { addCoefficients, expandCoefficients, modularGFReduction } from '../utilities/MixColumnUtils';
 import MixColumnsPolynomialDevelop from './MixColumnsPolynomialDevelop';
+import PolynomialExp from './PolynomialExp';
 
 function MixColumnsOp({state,fixedPolynomios} : {state: Matrix4x4, fixedPolynomios: Matrix4x4}){
     const stateGrid1Ref = useRef<StateGridHandle>(null);
@@ -28,9 +28,6 @@ function MixColumnsOp({state,fixedPolynomios} : {state: Matrix4x4, fixedPolynomi
     const lastGrid2SelectedCol = useRef<number>(0);
 
     const stateGrid3Ref = useRef<StateGridHandle>(null);
-    const lastGrid3Ref = useRef<HTMLElement>(null);
-    const lastGrid3SelectedRow = useRef<number>(0);
-    const lastGrid3SelectedCol = useRef<number>(0);
 
     const [g1SelectedRow, setG1SelectedRow] = useState<number>(0);
     const [g1SelectedCol, setG1SelectedCol] = useState<number>(0);
@@ -42,7 +39,6 @@ function MixColumnsOp({state,fixedPolynomios} : {state: Matrix4x4, fixedPolynomi
 
     const [g3SelectedRow, setG3SelectedRow] = useState<number>(0);
     const [g3SelectedCol, setG3SelectedCol] = useState<number>(0);
-    const [g3SelectedCell, setG3SelectedCell] = useState<HTMLElement>();
     
     useEffect(() => {
         getCells(g1SelectedRow, g1SelectedCol, g2SelectedRow, g2SelectedCol);
@@ -329,19 +325,16 @@ function MixColumnsOp({state,fixedPolynomios} : {state: Matrix4x4, fixedPolynomi
                     </div>
 
                     <div className='mco-multiplication-container'>
-                        <ChainedPolynomialExp termsArray={expandCoefficients(AesCipher.nonReducedGaloisMultiply(fixedPolynomios[g1SelectedRow][g1SelectedCol],state[g2SelectedRow][g2SelectedCol]))}></ChainedPolynomialExp>
+                        <ChainedPolynomialExp nonReducedCoeffcients={AesCipher.nonReducedGaloisMultiply(fixedPolynomios[g1SelectedRow][g1SelectedCol],state[g2SelectedRow][g2SelectedCol])}></ChainedPolynomialExp>
                     </div>
 
                     <div>
                         <MixColumnsPolynomialDevelop nonReducedCoefficients={AesCipher.nonReducedGaloisMultiply(fixedPolynomios[g1SelectedRow][g1SelectedCol],state[g2SelectedRow][g2SelectedCol])}></MixColumnsPolynomialDevelop>
                     </div>
 
-                    {/* <div className='mco-multiplication-container'>
-                        <ChainedPolynomialExp replaceWithReduction nonReducedCoefficientArray={AesCipher.nonReducedGaloisMultiply(fixedPolynomios[g1SelectedRow][g1SelectedCol],state[g2SelectedRow][g2SelectedCol])}></ChainedPolynomialExp>
-                    </div> */}
-
-                    
-
+                    <div>
+                        <PolynomialExp value={AesCipher.galoisMultiply(fixedPolynomios[g1SelectedRow][g1SelectedCol],state[g2SelectedRow][g2SelectedCol])}></PolynomialExp>
+                    </div>
                 </div>
             </div>
         </>
