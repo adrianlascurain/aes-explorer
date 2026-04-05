@@ -39,6 +39,10 @@ export function modularGFReduction(array: number[]): number[]{
         }
     }
 
+    for(let i = 0; i < array.length - 8; i++){
+        outArray[i] = 0;
+    }
+
     return outArray;
 }
 
@@ -57,7 +61,7 @@ export function addCoefficients(sumDestinationArray: number[], sourceArray: numb
 
 export function createLineThroughOfNonReducedCoefficients(nonReducedCoefficients: number[]){    
     const maxTerm = Math.max(...nonReducedCoefficients);
-    const lastArray = maxTerm - 1;
+    const lastArray = maxTerm;
     
     // Initialize 2D array with all false values
     const outArray: boolean[][] = Array(maxTerm)
@@ -68,10 +72,16 @@ export function createLineThroughOfNonReducedCoefficients(nonReducedCoefficients
     for(let i = 0; i < nonReducedCoefficients.length; i++){
         const currentElement = nonReducedCoefficients[i];
         if(currentElement > 1){
-            for(let j = 0; j <= lastArray; j++){
-                if(j !== lastArray){
+            if(currentElement % 2 === 0){
+                for(let j = 0; j < lastArray; j++){
                     outArray[j][i] = true;
-                }
+                }    
+            } else {
+                for(let j = 0; j < lastArray; j++){
+                    if(j < currentElement - 1){
+                        outArray[j][i] = true;
+                    }
+                }   
             }
         }
     }
