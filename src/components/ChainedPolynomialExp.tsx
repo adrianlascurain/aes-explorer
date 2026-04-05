@@ -1,11 +1,24 @@
-import type { CSSProperties } from "react";
+import type { CSSProperties, JSX } from "react";
 import {getPolynomialTermsByArray} from "../utilities/polyCreator"
+import { createLineThroughOfNonReducedCoefficients, expandCoefficients, modularGFReduction } from "../utilities/MixColumnUtils";
 
 
-function ChainedPolynomialExp({termsArray,replaceWithReduction = false} : {termsArray: (0|1)[][], replaceWithReduction?: boolean}){
+function ChainedPolynomialExp({nonReducedCoeffcients,replaceWithReduction = false, applyXOR} : {nonReducedCoeffcients: number[], replaceWithReduction?: boolean, applyXOR?: boolean}){
     
+    let termsArray = [];
     const cssStyleForReduction: CSSProperties = {"border": "solid 2px orange"};
-    const terms = termsArray.map((layer) => {return getPolynomialTermsByArray(layer,cssStyleForReduction,replaceWithReduction)})
+    let lineThroughArray: boolean[][];
+    let terms: JSX.Element[][] = [];
+    
+    if(applyXOR){        
+        termsArray = expandCoefficients([...nonReducedCoeffcients].reverse());
+        lineThroughArray = createLineThroughOfNonReducedCoefficients([...nonReducedCoeffcients]);
+        terms = termsArray.map((layer,index) => {return getPolynomialTermsByArray(layer,cssStyleForReduction,replaceWithReduction,lineThroughArray[index])})
+    }else{
+        termsArray = expandCoefficients([...nonReducedCoeffcients].reverse());
+        terms = termsArray.map((layer) => {return getPolynomialTermsByArray(layer,cssStyleForReduction,replaceWithReduction)})    
+    }
+    
 
     // Renderizar con separadores "+"
     const renderedTerms = terms.map((layer, layerIndex) => (
