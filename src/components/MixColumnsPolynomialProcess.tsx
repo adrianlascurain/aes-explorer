@@ -22,8 +22,8 @@ function MixColumnsPolynomialProcess({nonReducedCoefficients} : {nonReducedCoeff
     if(nonReducedCoefficients.length > 8){
         needsSubstitution = true;
             
-        let delta = nonReducedCoefficients.length - 8; // 11 - 8 -> 3
-        let initialTerm = nonReducedCoefficients.length - 1; //10
+        let delta = nonReducedCoefficients.length - 8;
+        let initialTerm = nonReducedCoefficients.length - 1;
         for(let i = 0; i < delta; i++){
             if(nonReducedCoefficients[i] > 0){
                 tempRed = baseReductions.get(initialTerm);
@@ -54,7 +54,7 @@ function MixColumnsPolynomialProcess({nonReducedCoefficients} : {nonReducedCoeff
             <div className="mcpd-polynomial-xor-addition" style={needsAddition? {display:"block"} : {display:"none"}}>
                 <p className="mcpd-polynomial-xor-addition-description">Adicion (XOR)</p>
                 <div className="mcpd-polynomial-xor-addition-content">
-                    <ChainedPolynomialExp applyXOR nonReducedCoeffcients={modularGFReductionArray}></ChainedPolynomialExp>
+                    <ChainedPolynomialExp applyXOR nonReducedCoeffcients={nonReducedCoefficients}></ChainedPolynomialExp>
                 </div>
             </div>
         </>

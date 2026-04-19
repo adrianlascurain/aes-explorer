@@ -1,5 +1,5 @@
+import { Fragment } from "react";
 import type { Matrix4x4 } from "../types/matrix";
-import VisualMultiplication from "./VisualMultiplication";
 import multiplicationIcon from "../assets/multiplication.svg";
 import "./GFRowColMultiplicationExp.css"
 import type { numericSystem } from "../types/numericSystems";
@@ -8,7 +8,7 @@ import xorIcon from "../assets/xorop.svg";
 import EnclosedTermsOperation from "./EnclosedTermsOperation";
 import AesCipher from "../cipher/AesCipher";
 
-function GFRowColMultiplicationExp({polynomios, polynomiosRow, state, stateCol, representation} : {polynomios : Matrix4x4, polynomiosRow: number, state: Matrix4x4, stateCol: number, representation: numericSystem}){
+function GFRowColMultiplicationExp({polynomios, polynomiosRow, state, stateCol, representation, inverseMixColumns = true} : {polynomios : Matrix4x4, polynomiosRow: number, state: Matrix4x4, stateCol: number, representation: numericSystem, inverseMixColumns?: boolean}){
     
     const pairValues = (firstArray: number[][], firstArrayRow: number, secondArray: number[][], secondArrayColumn: number) : [number,number][] => {
         return firstArray[firstArrayRow].map((value,i) => {
@@ -22,21 +22,23 @@ function GFRowColMultiplicationExp({polynomios, polynomiosRow, state, stateCol, 
     return (
         <div className="gfrcme-component-wrapper">
             {pairedValues.map((values,i) => (
-                i < pairedValuesLen - 1 ? (
-                <>
-                    <EnclosedTermsOperation values={values} iconSrc={multiplicationIcon} representation={representation}></EnclosedTermsOperation>
-                    <figure className="gfrcme-addition-figure">
-                        <img src={xorIcon} alt="" />
-                    </figure>
-                </>) : (
-                <>
-                    <EnclosedTermsOperation values={values} iconSrc={multiplicationIcon} representation={representation}></EnclosedTermsOperation>
-                </>)
-                )
-            )
-            }
+                <Fragment key={i}>
+                    {i < pairedValuesLen - 1 ? (
+                        <>
+                            <EnclosedTermsOperation values={values} iconSrc={multiplicationIcon} representation={representation}></EnclosedTermsOperation>
+                            <figure className="gfrcme-addition-figure">
+                                <img src={xorIcon} alt="" />
+                            </figure>
+                        </>
+                    ) : (
+                        <>
+                            <EnclosedTermsOperation values={values} iconSrc={multiplicationIcon} representation={representation}></EnclosedTermsOperation>
+                        </>
+                    )}
+                </Fragment>
+            ))}
             <span className="gfrcme-equal-sign">=</span>
-            <span className="gfrcme-multiplication-result">{convert2System(AesCipher.mixColumns(state)[polynomiosRow][stateCol],representation)}</span>
+            <span className="gfrcme-multiplication-result">{convert2System(AesCipher.generalMixColumns(state,inverseMixColumns? AesCipher.MIX_COLUMNS_INVERSE_MATRIX: AesCipher.MIX_COLUMNS_MATRIX)[polynomiosRow][stateCol],representation)}</span>
 
         </div>
     )
