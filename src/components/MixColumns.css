@@ -106,3 +106,36 @@
 .mco-quick-visualization{
     margin: 0px 20px;
 }
+
+.mco-polynomial-multiplication-result{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mco-polynomial-multiplication-result p{
+    margin: 0px 3px;
+}
+
+.mco-operation-procedure-selection-menu{
+    display: flex;
+    gap: 20px;
+}
+
+.mco-operation-procedure-selection-menu-option{
+    cursor: pointer;
+}
+
+.mco-left-attachable-operation-equal-char{
+    margin: 0px 10px;
+}
+
+.mco-left-attachable-operation-arrow-char{
+    margin: 0px 0px 0px 10px;
+}
+
+.mco-left-attachable-wrapper{
+    display: flex;
+    justify-content: right;
+    align-items: center;
+}

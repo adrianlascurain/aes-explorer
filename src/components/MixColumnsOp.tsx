@@ -15,8 +15,14 @@ import GFRowColMultiplicationExp from './GFRowColMultiplicationExp';
 import ChainedPolynomialExp from './ChainedPolynomialExp';
 import MixColumnsPolynomialProcess from './MixColumnsPolynomialProcess';
 import PolynomialExp from './PolynomialExp';
+import { convert2System } from '../utilities/conversor';
+import EnclosedTermsOperation from './EnclosedTermsOperation';
+import XORAdder from './XORAdder';
+import type {JSX} from "react"
 
-function MixColumnsOp({state,fixedPolynomios} : {state: Matrix4x4, fixedPolynomios: Matrix4x4}){
+function MixColumnsOp({state,inverseMixColumns = false} : {state: Matrix4x4, inverseMixColumns?: boolean}){
+    const fixedPolynomios = inverseMixColumns? AesCipher.MIX_COLUMNS_INVERSE_MATRIX as Matrix4x4: AesCipher.MIX_COLUMNS_MATRIX as Matrix4x4;    
+    
     const stateGrid1Ref = useRef<StateGridHandle>(null);
     const lastGrid1Ref = useRef<HTMLElement>(null);
     const lastGrid1SelectedRow = useRef<number>(0);
@@ -39,10 +45,47 @@ function MixColumnsOp({state,fixedPolynomios} : {state: Matrix4x4, fixedPolynomi
 
     const [g3SelectedRow, setG3SelectedRow] = useState<number>(0);
     const [g3SelectedCol, setG3SelectedCol] = useState<number>(0);
+
+    const [showElementByElementView, setShowElementByElementView] = useState<boolean>(true);
+    const [showGeneralDetailView, setShowGeneralDetailView] = useState<boolean>(false);
     
+    const [rowColumnGaloisMultiplicationResult,setRowColumnGaloisMultiplicationResult] = useState<number[]>([
+        AesCipher.galoisMultiply(fixedPolynomios[g1SelectedRow][0],state[0][g2SelectedCol]),
+        AesCipher.galoisMultiply(fixedPolynomios[g1SelectedRow][1],state[1][g2SelectedCol]),
+        AesCipher.galoisMultiply(fixedPolynomios[g1SelectedRow][2],state[2][g2SelectedCol]),
+        AesCipher.galoisMultiply(fixedPolynomios[g1SelectedRow][3],state[3][g2SelectedCol])
+    ]);
+
+    const calculateRowColGaloisMultiplication = (selectedRow: number, selectedCol: number) => {
+        const out: number[] = [];
+        for(let i = 0; i < 4; i++){
+            out[i] = AesCipher.galoisMultiply(fixedPolynomios[selectedRow][i],state[i][selectedCol]);
+        }
+        return out;
+    }
+
+    const generateAttachables = (): JSX.Element[] => {
+        const out: JSX.Element[] = [];
+        for(let i = 0; i < 4; i++){
+            out[i] = (
+                <div className="mco-left-attachable-wrapper">
+                    <EnclosedTermsOperation values={[fixedPolynomios[g1SelectedRow][i],state[i][g2SelectedCol]]} representation='hexPadded' iconSrc={multiplicationIcon}></EnclosedTermsOperation>
+                    <span className="mco-left-attachable-operation-equal-char">=</span>
+                    <span>{convert2System(rowColumnGaloisMultiplicationResult[i],'hexPadded')}</span>
+                    <span className="mco-left-attachable-operation-arrow-char ">⟶</span>
+                </div>
+            );
+        }
+        return out;
+    }
+
+    const [xorAttachable,setXorAttachable] = useState<JSX.Element[]>(generateAttachables());
+
     useEffect(() => {
         getCells(g1SelectedRow, g1SelectedCol, g2SelectedRow, g2SelectedCol);
-    },[g1SelectedRow, g1SelectedCol, g2SelectedRow, g2SelectedCol]);
+        setRowColumnGaloisMultiplicationResult(calculateRowColGaloisMultiplication(g1SelectedRow,g2SelectedCol));
+        setXorAttachable(generateAttachables());
+    },[g1SelectedRow, g1SelectedCol, g2SelectedRow, g2SelectedCol,showElementByElementView,rowColumnGaloisMultiplicationResult]);
 
     const handleClickOnElementG1 = (_e: React.MouseEvent, rowIndex: number, colIndex: number) => {        
         setG1SelectedRow(rowIndex);
@@ -67,6 +110,16 @@ function MixColumnsOp({state,fixedPolynomios} : {state: Matrix4x4, fixedPolynomi
         setG1SelectedRow(rowIndex);
         setG2SelectedCol(colIndex);
     };
+
+    const handleClickOnElementByElementDetail = (_e: React.MouseEvent) => {
+        setShowElementByElementView(true);
+        setShowGeneralDetailView(false)
+    }
+
+    const handleClickOnGeneralDetail = (_e: React.MouseEvent) => {
+        setShowElementByElementView(false);
+        setShowGeneralDetailView(true)
+    }
 
     const highlightStyles: React.CSSProperties = {
         background: "#FFA500"
@@ -102,14 +155,14 @@ function MixColumnsOp({state,fixedPolynomios} : {state: Matrix4x4, fixedPolynomi
             lastGrid1SelectedRow.current = g1SelectedRow;
             lastGrid1SelectedCol.current = g1SelectedCol;
             setG1SelectedCell(g1Cell)
-            Object.assign(g1Cell.style,highlightStyles);
+            Object.assign(g1Cell.style,showElementByElementView? highlightStyles : g1notHighlightStyles);
         }
 
         if(g2Cell){
             lastGrid2SelectedRow.current = g2SelectedRow;
             lastGrid2SelectedCol.current = g2SelectedCol;
             setG2SelectedCell(g2Cell)
-            Object.assign(g2Cell.style,highlightStyles);
+            Object.assign(g2Cell.style,showElementByElementView? highlightStyles : g2notHighlightStyles);
         }
     }
 
@@ -298,7 +351,7 @@ function MixColumnsOp({state,fixedPolynomios} : {state: Matrix4x4, fixedPolynomi
                             <h3 className="mco-grid-title">Resultado</h3>    
                         </div>
                         <StateGrid
-                            state={AesCipher.invMixColumns(state) as Matrix4x4}
+                            state={AesCipher.generalMixColumns(state,fixedPolynomios) as Matrix4x4}
                             ref={stateGrid3Ref}
                             isCellSelected={isG3ColSelected}
                             handleClickOnElement={handleClickOnElementG3}
@@ -313,28 +366,47 @@ function MixColumnsOp({state,fixedPolynomios} : {state: Matrix4x4, fixedPolynomi
                 
 
                 <div className='mco-operation-procedure'>
-                    <MultiplicationSummaryTable binaryTitle='Binario' hexTitle='Hex' polynomialTitle='Polinomio' g1Row={g1SelectedRow} g1Col={g1SelectedCol} g2Row={g2SelectedRow} g2Col={g2SelectedCol} g1Img={triangleIcon} g2Img={pentagonIcon} g1Value={fixedPolynomios[g1SelectedRow][g1SelectedCol]} g2Value={state[g2SelectedRow][g2SelectedCol]}/>
+                    <div className='mco-operation-procedure-selection-menu'>
+                        <span className='mco-operation-procedure-selection-menu-option' onClick={handleClickOnElementByElementDetail}>Detalle elemento a elemento</span>
+                        <span className='mco-operation-procedure-selection-menu-option' onClick={handleClickOnGeneralDetail}>Detalle general</span>
+                    </div>
+                    <hr />
+                    <div className='mco-operation-procedure-detail mco-element-by-element-multiplication' style={{display:  showElementByElementView? 'block' : 'none'}}>
+                        <MultiplicationSummaryTable binaryTitle='Binario' hexTitle='Hex' polynomialTitle='Polinomio' g1Row={g1SelectedRow} g1Col={g1SelectedCol} g2Row={g2SelectedRow} g2Col={g2SelectedCol} g1Img={triangleIcon} g2Img={pentagonIcon} g1Value={fixedPolynomios[g1SelectedRow][g1SelectedCol]} g2Value={state[g2SelectedRow][g2SelectedCol]}/>
 
-                    <div className='mco-multiplication-terms-container'>
-                        <span>Multiplicación</span>
-                        <PolynomialOperation 
-                            firstPoly={fixedPolynomios[g1SelectedRow][g1SelectedCol]}
-                            secondPoly={state[g2SelectedRow][g2SelectedCol]}
-                            operationChar='•'
-                        ></PolynomialOperation>
+                        <div className='mco-multiplication-terms-container'>
+                            <span>Multiplicación</span>
+                            <PolynomialOperation 
+                                firstPoly={fixedPolynomios[g1SelectedRow][g1SelectedCol]}
+                                secondPoly={state[g2SelectedRow][g2SelectedCol]}
+                                operationChar='•'
+                            ></PolynomialOperation>
+                        </div>
+
+                        <div className='mco-multiplication-container'>
+                            <ChainedPolynomialExp nonReducedCoeffcients={AesCipher.nonReducedGaloisMultiply(fixedPolynomios[g1SelectedRow][g1SelectedCol],state[g2SelectedRow][g2SelectedCol])}></ChainedPolynomialExp>
+                        </div>
+
+                        <div>
+                            <MixColumnsPolynomialProcess nonReducedCoefficients={AesCipher.nonReducedGaloisMultiply(fixedPolynomios[g1SelectedRow][g1SelectedCol],state[g2SelectedRow][g2SelectedCol])}></MixColumnsPolynomialProcess>
+                        </div>
+
+                        <div className='mco-polynomial-multiplication'>
+                            <p>Resultado</p>
+                            <div className='mco-polynomial-multiplication-result'>
+                                <PolynomialExp value={AesCipher.galoisMultiply(fixedPolynomios[g1SelectedRow][g1SelectedCol],state[g2SelectedRow][g2SelectedCol])}></PolynomialExp>
+                                <p>→</p>
+                                <p>{convert2System(AesCipher.galoisMultiply(fixedPolynomios[g1SelectedRow][g1SelectedCol],state[g2SelectedRow][g2SelectedCol]),'8bitBin')}</p>
+                                <p>→</p>
+                                <p>{convert2System(AesCipher.galoisMultiply(fixedPolynomios[g1SelectedRow][g1SelectedCol],state[g2SelectedRow][g2SelectedCol]),'hexPadded')}</p>
+                            </div>
+                        </div>
                     </div>
 
-                    <div className='mco-multiplication-container'>
-                        <ChainedPolynomialExp nonReducedCoeffcients={AesCipher.nonReducedGaloisMultiply(fixedPolynomios[g1SelectedRow][g1SelectedCol],state[g2SelectedRow][g2SelectedCol])}></ChainedPolynomialExp>
+                    <div className='mco-operation-procedure-detail mco-row-col-xor' style={{display:  showGeneralDetailView? 'block' : 'none'}}>
+                        <XORAdder operands={rowColumnGaloisMultiplicationResult} leftAttachable={xorAttachable}></XORAdder>
                     </div>
-
-                    <div>
-                        <MixColumnsPolynomialProcess nonReducedCoefficients={AesCipher.nonReducedGaloisMultiply(fixedPolynomios[g1SelectedRow][g1SelectedCol],state[g2SelectedRow][g2SelectedCol])}></MixColumnsPolynomialProcess>
-                    </div>
-
-                    <div>
-                        <PolynomialExp value={AesCipher.galoisMultiply(fixedPolynomios[g1SelectedRow][g1SelectedCol],state[g2SelectedRow][g2SelectedCol])}></PolynomialExp>
-                    </div>
+                    
                 </div>
             </div>
         </>

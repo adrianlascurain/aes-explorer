@@ -26,12 +26,11 @@ createRoot(document.getElementById('root')!).render(
     {/* <MixColumnsOp state={[[255, 4, 190, 12], [1, 5, 111, 13], [2, 6, 10, 204], [3, 79, 11, 15]]} fixedPolynomios={AesCipher.MIX_COLUMNS_INVERSE_MATRIX as Matrix4x4}/> */}
     <MixColumnsOp
   state={[
-  [0xbd, 0xf2, 0x0b, 0x8b],
-  [0x6e, 0xb5, 0x61, 0x10],
-  [0x7c, 0x77, 0x21, 0xb6],
-  [0x3d, 0x9e, 0x6e, 0x89]
-]}
-  fixedPolynomios={AesCipher.MIX_COLUMNS_INVERSE_MATRIX as Matrix4x4}
+  [0x63, 0x09, 0xcd, 0xba],
+  [0x53, 0x60, 0x70, 0xca],
+  [0xe0, 0xe1, 0xb7, 0xd0],
+  [0x8c, 0x04, 0x51, 0xe7]
+]} inverseMixColumns
 />
     {/* <LandingPage></LandingPage> */}
   </StrictMode>,
