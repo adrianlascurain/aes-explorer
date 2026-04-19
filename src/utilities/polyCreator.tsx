@@ -2,7 +2,7 @@ import type { CSSProperties, JSX } from "react";
 import { arrayToBinaryString, reducedEquivalent } from "./MixColumnUtils";
 
 // Convert binary string to polynomio
-export const getPolynomialTerms = (binary: string, need2reductStyle?: CSSProperties, replaceWithReduction: boolean = false, setLineThrough?: boolean[]) => {
+export const getPolynomialTerms = (binary: string, need2reduceStyle?: CSSProperties, replaceWithReduction: boolean = false, setLineThrough?: boolean[],setLineThroughBidimensional?: boolean[][]) => {
     if(!setLineThrough){
         setLineThrough = new Array(binary.length).fill(false);
     }
@@ -13,7 +13,6 @@ export const getPolynomialTerms = (binary: string, need2reductStyle?: CSSPropert
     let isLineThrough = false;
     let equivalent: number[] | undefined;
     let replacements: JSX.Element[];
-
     
     reversedBinary.forEach((bit, index) => {    
         if (bit === '1') {
@@ -33,7 +32,7 @@ export const getPolynomialTerms = (binary: string, need2reductStyle?: CSSPropert
                 if(replaceWithReduction && index >= 8){
                     equivalent = reducedEquivalent.get(index);
                     if(equivalent){
-                        replacements = getPolynomialTermsByArray(equivalent.reverse(),need2reductStyle,false,setLineThrough).reverse();
+                        replacements = getPolynomialTermsByArray(equivalent,need2reduceStyle,false,setLineThrough,setLineThroughBidimensional).reverse();
                         replacements = replacements.map((term, internalIndex) => (
                         <span key={`inner-term-${index}-${internalIndex}`}>
                             {internalIndex > 0 && ' + '}
@@ -44,7 +43,7 @@ export const getPolynomialTerms = (binary: string, need2reductStyle?: CSSPropert
                 }
 
                 terms.push(
-                    <span key={index} style={index >= 8 ? need2reductStyle : {}}>
+                    <span key={index} style={index >= 8 ? need2reduceStyle : {}}>
                         {
                             replaceWithReduction && index >= 8? <>{replacements}</> : <span style={{textDecoration: isLineThrough? "line-through red 4px": "none"}}>x<sup>{index}</sup></span>
                         }
@@ -57,9 +56,8 @@ export const getPolynomialTerms = (binary: string, need2reductStyle?: CSSPropert
     return terms;
 };
 
-export const getPolynomialTermsByArray = (termsArray: number[], need2reductStyle?: CSSProperties, replaceWithReduction: boolean = false, setLineThrough?: boolean[]) => {
+export const getPolynomialTermsByArray = (termsArray: number[], need2reduceStyle?: CSSProperties, replaceWithReduction: boolean = false, setLineThrough?: boolean[],setLineThroughBidimensional?: boolean[][]) => {
     termsArray.reverse()
     const binaryString = arrayToBinaryString(termsArray);
-    
-    return getPolynomialTerms(binaryString,need2reductStyle,replaceWithReduction,setLineThrough);
+    return getPolynomialTerms(binaryString,need2reduceStyle,replaceWithReduction,setLineThrough,setLineThroughBidimensional);
 };
