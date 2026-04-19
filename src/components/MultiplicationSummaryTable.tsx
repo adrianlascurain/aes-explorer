@@ -7,7 +7,6 @@ function MultiplicationSummaryTable({g1Row,g1Col,g1Value,g2Row,g2Col,g2Value,hex
 
     return(
         <div className='mst-matrix-multiplication-container'>
-            <hr />
             <VisualMultiplication g1Row={g1Row} g1Col={g1Col} g1Value={g1Value} g2Row={g2Row} g2Col={g2Col} g2Value={g2Value} representation='matrixPosition' g1Img={g1Img} g2Img={g2Img}/>
             <table className="mst-multiplication-resume-table">
                 <thead>
