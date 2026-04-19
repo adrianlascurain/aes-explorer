@@ -1,16 +1,22 @@
 import type { CSSProperties, JSX } from "react";
 import {getPolynomialTermsByArray} from "../utilities/polyCreator"
-import { createLineThroughOfNonReducedCoefficients, expandCoefficients } from "../utilities/MixColumnUtils";
+import { createLineThroughOfNonReducedCoefficients, expandCoefficients, modularGFReduction } from "../utilities/MixColumnUtils";
 
 
-function ChainedPolynomialExp({nonReducedCoeffcients,replaceWithReduction = false, applyXOR} : {nonReducedCoeffcients: number[], replaceWithReduction?: boolean, applyXOR?: boolean}){
+function ChainedPolynomialExp({nonReducedCoeffcients,replaceWithReduction = false, applyXOR = false} : {nonReducedCoeffcients: number[], replaceWithReduction?: boolean, applyXOR?: boolean}){
     
     let termsArray = [];
     const cssStyleForReduction: CSSProperties = {"border": "solid 2px orange"};
     let lineThroughArray: boolean[][];
     let terms: JSX.Element[][] = [];
     
-    if(applyXOR){        
+    if(applyXOR && replaceWithReduction){
+        const modularReducedCoefficients= modularGFReduction(nonReducedCoeffcients);      
+        termsArray = expandCoefficients([...nonReducedCoeffcients].reverse());
+        lineThroughArray = createLineThroughOfNonReducedCoefficients([...modularReducedCoefficients]);
+        terms = termsArray.map((layer,index) => {return getPolynomialTermsByArray(layer,cssStyleForReduction,replaceWithReduction,lineThroughArray[index],lineThroughArray)})  
+    }else if(applyXOR){
+        nonReducedCoeffcients = modularGFReduction(nonReducedCoeffcients);        
         termsArray = expandCoefficients([...nonReducedCoeffcients].reverse());
         lineThroughArray = createLineThroughOfNonReducedCoefficients([...nonReducedCoeffcients]);
         terms = termsArray.map((layer,index) => {return getPolynomialTermsByArray(layer,cssStyleForReduction,replaceWithReduction,lineThroughArray[index])})
