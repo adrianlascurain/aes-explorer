@@ -98,20 +98,36 @@ export default class AesCipher{
     }
 
     static invMixColumns(state: number[][]): number[][] {
-    const mixed = Array.from({ length: 4 }, () => Array(4).fill(0));
-    for (let col = 0; col < 4; col++) {
-        for (let row = 0; row < 4; row++) {
-            for (let k = 0; k < 4; k++) {
-                mixed[row][col] ^= AesCipher.galoisMultiply(
-                    AesCipher.MIX_COLUMNS_INVERSE_MATRIX[row][k],
-                    state[k][col]
-                );
+        const mixed = Array.from({ length: 4 }, () => Array(4).fill(0));
+        for (let col = 0; col < 4; col++) {
+            for (let row = 0; row < 4; row++) {
+                for (let k = 0; k < 4; k++) {
+                    mixed[row][col] ^= AesCipher.galoisMultiply(
+                        AesCipher.MIX_COLUMNS_INVERSE_MATRIX[row][k],
+                        state[k][col]
+                    );
+                }
             }
         }
-    }
 
-    return mixed;
-}
+        return mixed;
+    }
+    
+    static generalMixColumns(state: number[][],mixColumnsMatrix: readonly number[][]): number[][] {
+        const mixed = Array.from({ length: 4 }, () => Array(4).fill(0));
+        for (let col = 0; col < 4; col++) {
+            for (let row = 0; row < 4; row++) {
+                for (let k = 0; k < 4; k++) {
+                    mixed[row][col] ^= AesCipher.galoisMultiply(
+                        mixColumnsMatrix[row][k],
+                        state[k][col]
+                    );
+                }
+            }
+        }
+
+        return mixed;
+    }
 
     addRoundKey(state: number[][], roundKey: number[][]): number[][] {
         return state.map((row, i) => 
