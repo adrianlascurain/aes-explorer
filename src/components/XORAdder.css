@@ -1,0 +1,67 @@
+.xora-bit-chains{
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.xora-bit-chain{
+    font-family: monospace;
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+.xora-wrapper{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+}
+
+.xora-result-hr{
+    width: 100px;
+}
+
+.xora-operation-content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.xora-xor-cell{
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    margin-right: 5px;
+}
+
+.xora-xor-icon-figure{
+    margin: 0px;
+    width: 20px;
+    height: 20px;
+}
+
+.xora-xor-icon-figure img{
+    object-fit: cover;
+    width: 100%;
+    filter: invert(1);
+    text-align: left;
+}
+
+.xora-result-bit-chain{
+    margin-top: 30px;
+    font-family: monospace;
+    font-size: 1.5rem;
+}
+
+.xora-result-arrow{
+    margin: 0px 10px;
+}
+
+.xora-row-col-result{
+    background-color: rgb(0, 255, 0);
+    border: 2px solid white;
+    padding: 5px;
+}
