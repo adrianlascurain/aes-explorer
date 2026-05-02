@@ -8,7 +8,7 @@ import xorIcon from "../assets/xorop.svg";
 import EnclosedTermsOperation from "./EnclosedTermsOperation";
 import AesCipher from "../cipher/AesCipher";
 
-function GFRowColMultiplicationExp({polynomios, polynomiosRow, state, stateCol, representation, inverseMixColumns = true} : {polynomios : Matrix4x4, polynomiosRow: number, state: Matrix4x4, stateCol: number, representation: numericSystem, inverseMixColumns?: boolean}){
+function GFRowColMultiplicationExp({polynomios, polynomiosRow, state, stateCol, representation} : {polynomios : Matrix4x4, polynomiosRow: number, state: Matrix4x4, stateCol: number, representation: numericSystem}){
     
     const pairValues = (firstArray: number[][], firstArrayRow: number, secondArray: number[][], secondArrayColumn: number) : [number,number][] => {
         return firstArray[firstArrayRow].map((value,i) => {
@@ -38,7 +38,7 @@ function GFRowColMultiplicationExp({polynomios, polynomiosRow, state, stateCol, 
                 </Fragment>
             ))}
             <span className="gfrcme-equal-sign">=</span>
-            <span className="gfrcme-multiplication-result">{convert2System(AesCipher.generalMixColumns(state,inverseMixColumns? AesCipher.MIX_COLUMNS_INVERSE_MATRIX: AesCipher.MIX_COLUMNS_MATRIX)[polynomiosRow][stateCol],representation)}</span>
+            <span className="gfrcme-multiplication-result">{convert2System(AesCipher.generalMixColumns(state,polynomios)[polynomiosRow][stateCol],representation)}</span>
 
         </div>
     )

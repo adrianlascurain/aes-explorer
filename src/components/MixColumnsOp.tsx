@@ -64,28 +64,27 @@ function MixColumnsOp({state,inverseMixColumns = false} : {state: Matrix4x4, inv
         return out;
     }
 
-    const generateAttachables = (): JSX.Element[] => {
+    const [xorAttachable,setXorAttachable] = useState<JSX.Element[]>([]);
+
+    useEffect(() => {
+        getCells(g1SelectedRow, g1SelectedCol, g2SelectedRow, g2SelectedCol);
+        const newResult = calculateRowColGaloisMultiplication(g1SelectedRow,g2SelectedCol);
+        setRowColumnGaloisMultiplicationResult(newResult);
+        
+        // Generar attachables con los nuevos valores calculados
         const out: JSX.Element[] = [];
         for(let i = 0; i < 4; i++){
             out[i] = (
-                <div className="mco-left-attachable-wrapper">
+                <div className="mco-left-attachable-wrapper" key={i}>
                     <EnclosedTermsOperation values={[fixedPolynomios[g1SelectedRow][i],state[i][g2SelectedCol]]} representation='hexPadded' iconSrc={multiplicationIcon}></EnclosedTermsOperation>
                     <span className="mco-left-attachable-operation-equal-char">=</span>
-                    <span>{convert2System(rowColumnGaloisMultiplicationResult[i],'hexPadded')}</span>
+                    <span>{convert2System(newResult[i],'hexPadded')}</span>
                     <span className="mco-left-attachable-operation-arrow-char ">⟶</span>
                 </div>
             );
         }
-        return out;
-    }
-
-    const [xorAttachable,setXorAttachable] = useState<JSX.Element[]>(generateAttachables());
-
-    useEffect(() => {
-        getCells(g1SelectedRow, g1SelectedCol, g2SelectedRow, g2SelectedCol);
-        setRowColumnGaloisMultiplicationResult(calculateRowColGaloisMultiplication(g1SelectedRow,g2SelectedCol));
-        setXorAttachable(generateAttachables());
-    },[g1SelectedRow, g1SelectedCol, g2SelectedRow, g2SelectedCol,showElementByElementView,rowColumnGaloisMultiplicationResult]);
+        setXorAttachable(out);
+    },[g1SelectedRow, g1SelectedCol, g2SelectedRow, g2SelectedCol,showElementByElementView]);
 
     const handleClickOnElementG1 = (_e: React.MouseEvent, rowIndex: number, colIndex: number) => {        
         setG1SelectedRow(rowIndex);

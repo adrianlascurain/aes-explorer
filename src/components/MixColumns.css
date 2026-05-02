@@ -100,7 +100,13 @@
 
 .mco-operation-procedure{
     margin: 0px 20px;
-    width: clamp(500px, 90%, 900px);
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.mco-operation-procedure hr{
+    width: 100%;
 }
 
 .mco-quick-visualization{

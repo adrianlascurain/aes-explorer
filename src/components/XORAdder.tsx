@@ -8,27 +8,29 @@ function XORAdder({operands,leftAttachable, rightAttachable} : {operands: number
     return(
         <div className="xora-wrapper">
             <table className="xora-operation-table">
-                {operands.map((operand,index) => {
-                    return(
-                        <tr>
-                            <td>{leftAttachable? leftAttachable[index] : null}</td>
-                            <td className="xora-bit-chain">{convert2System(operand,"8bitBin")}</td>
-                            <td>{rightAttachable? rightAttachable[index] : null}</td>
-                        </tr>
-                    )
-                })}
-                <tr>
-                    <td className="xora-xor-cell">
-                        <figure className="xora-xor-icon-figure"><img src={xorIcon} alt="" /></figure>
-                    </td>
-                    <td><hr className="xora-result-hr"/></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td className="xora-bit-chain">{convert2System(xorResult,"8bitBin")}</td>
-                    <td></td>
-                </tr>
+                <tbody>
+                    {operands.map((operand,index) => {
+                        return(
+                            <tr key={index}>
+                                <td>{leftAttachable? leftAttachable[index] : null}</td>
+                                <td className="xora-bit-chain">{convert2System(operand,"8bitBin")}</td>
+                                <td>{rightAttachable? rightAttachable[index] : null}</td>
+                            </tr>
+                        )
+                    })}
+                    <tr>
+                        <td className="xora-xor-cell">
+                            <figure className="xora-xor-icon-figure"><img src={xorIcon} alt="" /></figure>
+                        </td>
+                        <td><hr className="xora-result-hr"/></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td className="xora-bit-chain">{convert2System(xorResult,"8bitBin")}</td>
+                        <td></td>
+                    </tr>
+                </tbody>
             </table>
             <div className="xora-result-bit-chain">
                 <span>{convert2System(xorResult,"8bitBin")}</span>
